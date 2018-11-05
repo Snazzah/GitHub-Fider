@@ -1,0 +1,33 @@
+{
+  "name": "github-fider",
+  "version": "0.0.1",
+  "description": "A GitHub pull request listener for interacting with Fider",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node src/index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Sven65/GitHub-Fider.git"
+  },
+  "keywords": [
+    "Github",
+    "GitHub",
+    "Fider",
+    "Pull",
+    "Request"
+  ],
+  "author": "Mackan",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/Sven65/GitHub-Fider/issues"
+  },
+  "homepage": "https://github.com/Sven65/GitHub-Fider#readme",
+  "dependencies": {
+    "dotenv": "^6.1.0",
+    "eslint": "^5.8.0",
+    "express": "^4.16.4",
+    "node-fetch": "^2.2.0"
+  }
+}
