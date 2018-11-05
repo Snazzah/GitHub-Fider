@@ -15,8 +15,13 @@ const MERGE_ACTIONS = config.get('MERGE_ACTIONS').toLowerCase().split(',')
 
 const getPRData = body => ({
 	userLogin: body.pull_request.user.login,
+	userUrl: body.pull_request.user.login,
 	title: body.pull_request.title,
+	url: body.pull_request.html_url,
+	number: body.pull_request.number,
+	createdAt: body.pull_request.created_at,
 	senderLogin: body.sender.login,
+	senderUrl: body.sender.login,
 })
 
 app.use(express.json())
