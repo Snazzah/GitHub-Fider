@@ -15,7 +15,6 @@ app.get('/', (req, res) => res.send('Hello World!'))
 
 app.post('/github', async (req, res) => {
 	res.send("OK")
-	console.log("REQ", req.body)
 
 	const body = req.body
 
@@ -28,39 +27,29 @@ app.post('/github', async (req, res) => {
 	const FIDER_ACTION = FIDER_DETAILS[1].toLowerCase()
 	const FIDER_ID = FIDER_DETAILS[2]
 
-	console.log("ACTION", ACTION_TYPE, "FIDER_DEETS", FIDER_DETAILS)
-
-	console.log("FIDER_MORE", FIDER_ACTION, FIDER_ID)
-
 	if (ACTION_TYPE === 'closed') {
 		const post = fider.Post(FIDER_ID)
 
-		let data
-
 		if (FIDER_ACTION === 'plans') {
-			data = await post.plans('Planned')
+			await post.plans(`Planned - ${body.user.login}`)
 		} else if (FIDER_ACTION === 'starts') {
-			data = await post.start('Started')
+			await post.start(`Started - ${body.user.login}`)
 		} else if ( FIDER_ACTION === 'completes' || FIDER_ACTION === 'closes' ) {
-			data = await post.complete('Completed.')
+			await post.complete(`Completed - ${body.user.login}`)
 		}
-
-		console.log("FIDER RESP", data)
 
 	} else if (ACTION_TYPE === 'opened') {
 		const post = fider.Post(FIDER_ID)
 
-		let data
-
 		if (FIDER_ACTION === 'plans') {
-			data = await post.plans('Planned')
+			await post.plans(`Planned - ${body.user.login}`)
 		} else if (FIDER_ACTION === 'starts') {
-			data = await post.start('Started')
+			await post.start(`Started - ${body.user.login}`)
 		} else if ( FIDER_ACTION === 'completes' || FIDER_ACTION === 'closes' ) {
-			data = await post.complete('Completed.')
+			if(config.get('CLOSE_ON_CREATE')){
+				await post.complete(`Completed - ${body.user.login}`)
+			}
 		}
-
-		console.log("FIDER RESP", data)
 	}
 })
 

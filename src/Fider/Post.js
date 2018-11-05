@@ -10,10 +10,10 @@ class Post {
 	async _setStatus(status, comment){
 		return await fetch(`${this._baseURL}/api/v1/posts/${this._id}/status`, {
 			method: 'PUT',
-			body: {
+			body: JSON.stringify({
 				status,
 				text: comment,
-			},
+			}),
 			headers: {
 				'Authorization': `Bearer ${this._API_KEY}`,
 				'Content-Type': 'application/json',
