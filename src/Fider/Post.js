@@ -7,30 +7,39 @@ class Post {
 		this._id = id
 	}
 
-	async _setStatus(status, comment){
+	async _setStatus(status, comment, userID){
+
+		const headers = {
+			'Authorization': `Bearer ${this._API_KEY}`,
+			'Content-Type': 'application/json',
+		}
+
+		if (userID) {
+			headers['X-Fider-UserID'] = userID
+		}
+
+		console.log("headers", headers)
+
 		return await fetch(`${this._baseURL}/api/v1/posts/${this._id}/status`, {
 			method: 'PUT',
 			body: JSON.stringify({
 				status,
 				text: comment,
 			}),
-			headers: {
-				'Authorization': `Bearer ${this._API_KEY}`,
-				'Content-Type': 'application/json',
-			},
+			headers,
 		}).then(res => res.json())
 	}
 
-	async plans(comment){
-		return await this._setStatus('planned', comment)
+	async plans(comment, userID){
+		return await this._setStatus('planned', comment, userID)
 	}
 
-	async start(comment){
-		return await this._setStatus('started', comment)
+	async start(comment, userID){
+		return await this._setStatus('started', comment, userID)
 	}
 
-	async complete(comment){
-		return await this._setStatus('completed', comment)
+	async complete(comment, userID){
+		return await this._setStatus('completed', comment, userID)
 	}
 }
 

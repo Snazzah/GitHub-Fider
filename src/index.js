@@ -1,4 +1,5 @@
 const config = require('./Util/Config')
+const util = require("util")
 
 const Fider = require('./Fider')
 const Formatter = require('./Util/Formatter')
@@ -33,37 +34,49 @@ app.post('/github', async (req, res) => {
 
 	const PR_BODY = body.pull_request.body || ""
 
-	const FIDER_DETAILS = PR_BODY.match(/(closes|completes|plans|starts)\s?fider:(\d+)/)
+	const FIDER_DETAILS = PR_BODY.toLowerCase().match(/(closes|completes|plans|starts)\s?fider:(\d+)/)
 
 	const FIDER_ACTION = FIDER_DETAILS[1].toLowerCase()
 	const FIDER_ID = FIDER_DETAILS[2]
+
+	console.log("body", util.inspect(body))
+
+	let userID
+
+	if (config.get('CREATE_USER')) {
+		let data = await fider.createUser(body.pull_request.user.login, '', body.pull_request.user.id.toString())
+
+		userID = data.id.toString()
+
+		console.log("USERID: ", userID)
+	}
 
 	if (ACTION_TYPE === 'closed') {
 		const post = fider.Post(FIDER_ID)
 
 		if (FIDER_ACTION === 'plans' && MERGE_ACTIONS.indexOf('plans') > -1) {
-			await post.plans(Formatter(config.get('PLAN_MESSAGE'), getPRData(body)))
+			await post.plans(Formatter(config.get('PLAN_MESSAGE'), getPRData(body)), userID)
 		} else if (FIDER_ACTION === 'starts' && MERGE_ACTIONS.indexOf('starts') > -1) {
-			await post.start(Formatter(config.get('START_MESSAGE'), getPRData(body)))
+			await post.start(Formatter(config.get('START_MESSAGE'), getPRData(body)), userID)
 		} else if (
 			(FIDER_ACTION === 'completes' || FIDER_ACTION === 'closes') &&
 			(MERGE_ACTIONS.indexOf('completes') > -1 || OPEN_ACTIONS.indexOf('closes') > -1)
 		) {
-			await post.complete(Formatter(config.get('COMPLETE_MESSAGE'), getPRData(body)))
+			await post.complete(Formatter(config.get('COMPLETE_MESSAGE'), getPRData(body)), userID)
 		}
 
 	} else if (ACTION_TYPE === 'opened') {
 		const post = fider.Post(FIDER_ID)
 
 		if (FIDER_ACTION === 'plans' && OPEN_ACTIONS.indexOf('plans') > -1) {
-			await post.plans(Formatter(config.get('PLAN_MESSAGE'), getPRData(body)))
+			await post.plans(Formatter(config.get('PLAN_MESSAGE'), getPRData(body)), userID)
 		} else if (FIDER_ACTION === 'starts' && OPEN_ACTIONS.indexOf('starts') > -1) {
-			await post.start(Formatter(config.get('START_MESSAGE'), getPRData(body)))
+			await post.start(Formatter(config.get('START_MESSAGE'), getPRData(body)), userID)
 		} else if (
 			(FIDER_ACTION === 'completes' || FIDER_ACTION === 'closes') &&
 			(OPEN_ACTIONS.indexOf('completes') > -1 || OPEN_ACTIONS.indexOf('closes') > -1)
 		) {
-			await post.complete(Formatter(config.get('COMPLETE_MESSAGE'), getPRData(body)))
+			await post.complete(Formatter(config.get('COMPLETE_MESSAGE'), getPRData(body)), userID)
 		}
 	}
 })
