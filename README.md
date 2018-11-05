@@ -51,8 +51,13 @@ Fider allows contributors and administrators to set a message to follow along th
 
 From this application, these can be set in the `.env` file and support the following variables by putting them in curly brackets (`{variable}`):
 
-| VARIABLE    | VALUE                                                       |
-|-------------|-------------------------------------------------------------|
-| userLogin   | The username of the user that created the pull request      |
-| title       | The title of the pull request                               |
-| senderLogin | The username of the user that triggered the webhook request |
+| VARIABLE    | VALUE                                                         |
+|-------------|---------------------------------------------------------------|
+| userLogin   | The username of the user that created the pull request        |
+| userUrl     | The profile URL of the user that created the pull request     |
+| title       | The title of the pull request                                 |
+| number      | The pull request number                                       |
+| url         | The URL of the pull request                                   |
+| createdAt   | The timestamp of when the pull request was created            |
+| senderLogin | The username of the user that triggered the webhook request   |
+| senderUrl   | The profileURL of the user that triggered the webhook request |
